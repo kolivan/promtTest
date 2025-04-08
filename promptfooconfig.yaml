@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: "Getting started"
+prompts:
+  - |
+    You are an investment memo validator analyzing an investment memo.
+    Criteria to validate: "${question}"
+
+    Memo content:
+    ${content}
+
+    Please provide your assessment in the exact JSON format below with no other text:
+    {
+      "status": "yes"/"no"/"na". Please answer "yes" if criteria is met, "no" if it is not met, and "na" if it is not applicable to the company that this memo is about.
+      "explanation": "your explanation here"
+    }
+
+    If the criteria IS met: Provide a brief positive explanation that starts with "Good" or "Strong" or "Clear".
+    If the criteria is NOT met: Provide a specific explanation about what's missing that starts with "Missing" or "Inadequate"
+
+providers:
+  - openai:gpt-4o-mini:
+      apiKey: ${OPENAI_API_KEY}
+
+tests:
+  - vars:
+      question: Does the memo include US Total Addressable Market (TAM) for at least the most recent 2 years?
+      content: ${readFile:./file.txt}
+
+    assert:
+      - type: contains
+        value: '"status": "yes"'
+
+  - vars:
+      question: Does the memo include Worldwide TAM for at least most recent 2 years + current year + next year?
+      content: ${readFile:./file.txt}
+
+    assert:
+      - type: contains
+        value: '"status": "yes"'
