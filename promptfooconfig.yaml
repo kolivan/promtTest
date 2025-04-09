@@ -18,13 +18,12 @@ prompts:
     If the criteria is NOT met: Provide a specific explanation about what's missing that starts with "Missing" or "Inadequate"
 
 providers:
-  - openai:gpt-4o-mini:
-      apiKey: ${OPENAI_API_KEY}
+  - openai:gpt-4o-mini
 
 tests:
   - vars:
       question: Does the memo include US Total Addressable Market (TAM) for at least the most recent 2 years?
-      content: ${readFile:./file.txt}
+      content: file://file.txt
 
     assert:
       - type: contains
@@ -32,7 +31,7 @@ tests:
 
   - vars:
       question: Does the memo include Worldwide TAM for at least most recent 2 years + current year + next year?
-      content: ${readFile:./file.txt}
+      content: file://file.txt
 
     assert:
       - type: contains
